@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biocimentation & Impact Environnemental</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .hero {
+      background: linear-gradient(120deg, #198754, #20c997);
+      color: white;
+      padding-top: 100px;
+      padding-bottom: 100px;
+    }
+    .card img {
+      height: 220px;
+      object-fit: cover;
+    }
+    footer {
+      background: #212529;
+      color: white;
+      padding: 20px;
+      margin-top: 50px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR FIXE -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="index.html">Biocimentation</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link active" href="index.html">Présentation</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="service.html">Service</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="llm.html">IA</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- ESPACE POUR NE PAS CACHER LE CONTENU PAR LA NAVBAR -->
+<div style="height:70px"></div>
+
+<!-- HERO SECTION -->
+<section class="hero text-center">
+  <div class="container">
+    <h1 class="display-5 fw-bold">Biocimentation : une alternative durable au ciment</h1>
+    <p class="lead mt-3">
+      Exploiter les mécanismes biologiques pour réduire l’impact environnemental de la construction
+    </p>
+    <a href="service.html" class="btn btn-light btn-lg mt-3">Tester le service</a>
+  </div>
+</section>
+
+<!-- SECTION COMPARAISON -->
+<section class="container my-5">
+  <h2 class="mb-4 text-center">Deux approches, deux impacts</h2>
+  <div class="row g-4">
+    <!-- CIMENT CLASSIQUE -->
+    <div class="col-md-6">
+      <div class="card h-100 shadow">
+        <img src="images/ciment.png" class="card-img-top" alt="Ciment classique">
+        <div class="card-body">
+          <h5 class="card-title text-danger">Cimentation classique</h5>
+          <ul>
+            <li>Cuisson à haute température (~1450°C)</li>
+            <li>Très forte émission de CO₂</li>
+            <li>Processus énergivore</li>
+            <li>Matériau rigide et fissurable</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!-- BIOCIMENTATION -->
+    <div class="col-md-6">
+      <div class="card h-100 shadow">
+        <img src="images/biocimentation.png" class="card-img-top" alt="Biocimentation">
+        <div class="card-body">
+          <h5 class="card-title text-success">Biocimentation</h5>
+          <ul>
+            <li>Processus biologique à température ambiante</li>
+            <li>Faible empreinte carbone</li>
+            <li>Auto-réparation possible</li>
+            <li>Approche inspirée du vivant</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION EXPLICATION SEM -->
+<section class="container my-5">
+  <div class="row align-items-center">
+    <div class="col-md-6">
+      <h2>Pourquoi l’analyse SEM est cruciale ?</h2>
+      <p>
+        L’efficacité de la biocimentation dépend de la formation de ponts cristallins entre les grains.
+        L’analyse automatique d’images SEM permet de :
+      </p>
+      <ul>
+        <li>Quantifier le pontage</li>
+        <li>Comparer différentes formulations</li>
+        <li>Optimiser les conditions biologiques</li>
+      </ul>
+    </div>
+    <div class="col-md-6">
+      <img src="images/Gemini_Generated_Image_v7u36lv7u36lv7u3.png" class="img-fluid rounded shadow" alt="Exemple SEM">
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="text-center">
+  © 2026 – Projet Biocimentation – Laboratoire PFE
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

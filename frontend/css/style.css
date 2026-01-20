@@ -1,0 +1,14 @@
+body {
+  background-color: #f8f9fa;
+}
+
+.hero {
+  background: linear-gradient(120deg, #198754, #20c997);
+  color: white;
+}
+
+footer {
+  background: #212529;
+  color: white;
+  padding: 20px;
+}
