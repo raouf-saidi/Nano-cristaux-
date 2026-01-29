@@ -12,3 +12,127 @@ footer {
   color: white;
   padding: 20px;
 }
+
+/* ====== LLM / CHAT THEME (vert minéral) ====== */
+:root{
+  --mineral: #1f7a5a;
+  --mineral-2: #145a42;
+  --bg-soft: #f5f7f6;
+  --border: #e5e7eb;
+  --text: #111827;
+}
+
+.llm-card{
+  border-radius: 16px;
+}
+
+.llm-badge{
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(31, 122, 90, 0.12);
+  color: var(--mineral);
+  border: 1px solid rgba(31, 122, 90, 0.25);
+  font-weight: 600;
+}
+
+.llm-hint{
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 12px;
+}
+
+.chat-box{
+  height: 330px;           /* important: fixe la zone */
+  overflow-y: auto;
+  background: #fbfbfb;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 12px;
+}
+
+/* Bulles */
+.chat-bubble{
+  max-width: 72%;
+  padding: 2px 2px;
+  border-radius: 16px;
+  line-height: 1.35;
+  white-space: pre-wrap;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.03);
+}
+
+.chat-input{
+  resize: none;          /* empêche d’agrandir */
+  max-height: 70px;      /* plus compact */
+  font-size: 14px;
+}
+.chat-user{
+  margin-left: auto;
+  background: var(--mineral);
+  color: #fff;
+  border-bottom-right-radius: 6px;
+}
+
+.chat-assistant{
+  margin-right: auto;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-bottom-left-radius: 6px;
+}
+
+/* Petit header dans la bulle (optionnel) */
+.chat-meta{
+  font-size: 11px;
+  opacity: 0.8;
+  margin-bottom: 4px;
+}
+/* ===== ACTIONS FEEDBACK ===== */
+.chat-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.chat-actions button {
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  padding: 4px 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  opacity: 0.55;
+  transition: all 0.15s ease;
+}
+
+.chat-actions button:hover {
+  opacity: 1;
+  background: rgba(0,0,0,0.05);
+}
+
+/* États */
+.chat-actions .fb-like.active-like {
+  color: #1f7a5a;
+  opacity: 1;
+}
+
+.chat-actions .fb-dislike.active-like {
+  color: #c0392b;
+  opacity: 1;
+}
+
+.chat-actions .fb-correct {
+  font-size: 12px;
+  padding: 4px 8px;
+  border: 1px solid #ddd;
+  border-radius: 999px;
+  opacity: 0.6;
+}
+
+.chat-actions .fb-correct:hover {
+  background: #f5f7f6;
+  opacity: 1;
+}
