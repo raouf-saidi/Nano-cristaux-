@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NAAI V2 - Soutenance PFE</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;400;500;700&display=swap"
+        rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+        /* --- THEME : ECO-RESEARCH --- */
+        :root {
+            --bg-color: #0f172a;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+
+            --accent-bio: #34d399;
+            /* Vert Menthe */
+            --accent-tech: #38bdf8;
+            /* Bleu Ciel */
+            --text-main: #f8fafc;
+            --text-muted: #cbd5e1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: radial-gradient(circle at 15% 50%, rgba(52, 211, 153, 0.08), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(56, 189, 248, 0.08), transparent 25%);
+            color: var(--text-main);
+            font-family: 'DM Sans', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* --- LAYOUTS --- */
+        .slide {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            /* Espace augmenté entre les colonnes */
+            padding: 80px 100px;
+            /* Marges augmentées */
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            z-index: 10;
+        }
+
+        /* --- TYPOGRAPHIE --- */
+        h1 {
+            font-size: 5rem;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 25px;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #fff 0%, #cbd5e1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h2 {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        p {
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        /* --- VISUALS (CORRIGÉ) --- */
+        .visual-container {
+            width: 100%;
+            height: 100%;
+            /* Suppression du fond blanc et du padding interne */
+            background: transparent;
+            border-radius: 24px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: var(--glass-border);
+            /* Juste une fine bordure */
+        }
+
+        .visual-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            /* L'image prend toute la place dispo sans être coupée */
+            display: block;
+        }
+
+        /* --- SLIDE 2 : EQUIPE --- */
+        .team-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 30px;
+            width: 100%;
+            margin-top: 60px;
+        }
+
+        .team-member {
+            background: var(--glass-bg);
+            border: var(--glass-border);
+            border-radius: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 20px;
+            transition: 0.3s;
+            text-align: center;
+        }
+
+        .team-member:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-10px);
+            border-color: var(--accent-tech);
+        }
+
+        .avatar-circle {
+            width: 130px;
+            height: 130px;
+            background: #1e293b;
+            border-radius: 50%;
+            margin-bottom: 25px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            /* Mettre background-image ici */
+        }
+
+        .member-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .member-role {
+            font-size: 1.1rem;
+            color: var(--accent-tech);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* --- NAVIGATION --- */
+        .nav-controls {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            display: flex;
+            gap: 15px;
+            z-index: 100;
+        }
+
+        .nav-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            transition: 0.2s;
+            backdrop-filter: blur(5px);
+        }
+
+        .nav-btn:hover {
+            background: var(--accent-tech);
+            color: #000;
+        }
+
+        /* NOUVEAU STYLE POUR LES INFOS ACADÉMIQUES */
+        .academic-info {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .academic-info span {
+            position: relative;
+        }
+
+        .academic-info span:not(:last-child)::after {
+            content: '•';
+            position: absolute;
+            right: -12px;
+            color: var(--accent-tech);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="slide active" style="grid-template-columns: 1fr; align-content: center; text-align: center;">
+        <div style="max-width: 1400px; margin: 0 auto;">
+
+            <div
+                style="margin-bottom: 20px; color: var(--accent-bio); font-weight: 700; letter-spacing: 2px; text-transform: uppercase; font-size: 1.1rem;">
+                Projet de Fin d'Études • Groupe NAAI
+            </div>
+
+            <div class="academic-info">
+                <span>Parcours Big Data & Machine Learning</span>
+                <span>ING3</span>
+                <span>2025-2026</span>
+            </div>
+
+            <h1 style="font-size: 7rem; margin-bottom: 20px;">NAAI V2</h1>
+
+            <p
+                style="font-size: 2.5rem; color: white; margin-bottom: 50px; max-width: 1000px; margin-left: auto; margin-right: auto;">
+                Optimisation de la Biocimentation par Intelligence Artificielle
+            </p>
+
+            <div
+                style="margin-top: 60px; display: inline-flex; align-items: center; gap: 60px; padding: 30px 70px; background: white; border-radius: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.1);">
+                <img src="Logo_Efrei_2022.svg.png" style="height: 70px;">
+                <div style="width: 2px; height: 50px; background: #e2e8f0;"></div>
+                <img src="image_c66039.png" style="height: 60px;">
+            </div>
+        </div>
+    </div>
+
+    <div class="slide" style="grid-template-columns: 1fr; align-content: center;">
+        <div style="width: 100%; max-width: 1800px; margin: 0 auto;">
+            <h2 style="color: var(--accent-tech); border-color: var(--accent-tech);">
+                <i class="ph ph-users"></i> L'ÉQUIPE PROJET
+            </h2>
+            <h1 style="font-size: 5rem;">QUI FAIT QUOI ?</h1>
+
+            <div class="team-container">
+                <div class="team-member">
+                    <div class="avatar-circle"></div>
+                    <div class="member-name">Abderraouf S.</div>
+                    <div class="member-role">Lead Data</div>
+                </div>
+                <div class="team-member">
+                    <div class="avatar-circle"></div>
+                    <div class="member-name">Yanis H.</div>
+                    <div class="member-role">Cloud Architect</div>
+                </div>
+                <div class="team-member">
+                    <div class="avatar-circle"></div>
+                    <div class="member-name">Mohamed S.</div>
+                    <div class="member-role">Backend Dev</div>
+                </div>
+                <div class="team-member">
+                    <div class="avatar-circle"></div>
+                    <div class="member-name">Mohamed B.</div>
+                    <div class="member-role">Frontend / UI</div>
+                </div>
+                <div class="team-member">
+                    <div class="avatar-circle"></div>
+                    <div class="member-name">Akram B.</div>
+                    <div class="member-role">Recherche Bio</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div style="display: flex; flex-direction: column; justify-content: center;">
+            <h2 style="color: var(--accent-bio); border-color: var(--accent-bio); color: var(--accent-bio);">
+                <i class="ph ph-plant"></i> 01. CONTEXTE
+            </h2>
+            <h1 style="font-size: 5rem;">LA BIOCIMENTATION</h1>
+            <p>
+                Un processus naturel de <strong>bio-ingénierie</strong> où des bactéries précipitent du carbonate de
+                calcium (CaCO3).
+            </p>
+
+            <div style="margin-top: 50px; display: flex; flex-direction: column; gap: 30px;">
+                <div
+                    style="display: flex; gap: 25px; align-items: start; background: rgba(255,255,255,0.03); padding: 25px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05);">
+                    <div
+                        style="background: rgba(52, 211, 153, 0.2); padding: 15px; border-radius: 50%; color: var(--accent-bio);">
+                        <i class="ph ph-leaf" style="font-size: 2rem;"></i>
+                    </div>
+                    <div>
+                        <strong
+                            style="display: block; font-size: 1.6rem; margin-bottom: 5px; color: #fff;">Écologique</strong>
+                        <span style="color: var(--text-muted); font-size: 1.3rem;">Alternative durable au ciment
+                            traditionnel.</span>
+                    </div>
+                </div>
+                <div
+                    style="display: flex; gap: 25px; align-items: start; background: rgba(255,255,255,0.03); padding: 25px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05);">
+                    <div style="background: rgba(244, 63, 94, 0.2); padding: 15px; border-radius: 50%; color: #f43f5e;">
+                        <i class="ph ph-warning" style="font-size: 2rem;"></i>
+                    </div>
+                    <div>
+                        <strong style="display: block; font-size: 1.6rem; margin-bottom: 5px; color: #fff;">Le Défi
+                            Actuel</strong>
+                        <span style="color: var(--text-muted); font-size: 1.3rem;">L'analyse au microscope est manuelle
+                            et lente.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="visual-container">
+            <img src="image_c6d8b8.jpg" alt="Biocimentation MEB">
+        </div>
+    </div>
+
+    <div class="nav-controls">
+        <button class="nav-btn" onclick="changeSlide(-1)"><i class="ph ph-caret-left"></i></button>
+        <button class="nav-btn" onclick="changeSlide(1)"><i class="ph ph-caret-right"></i></button>
+    </div>
+    <div class="slide">
+        <div style="display: flex; flex-direction: column; justify-content: center;">
+            <h2 style="color: #f43f5e; border-color: #f43f5e; background: rgba(244, 63, 94, 0.1);">
+                <i class="ph ph-warning-octagon"></i> 02. LA PROBLÉMATIQUE
+            </h2>
+            <h1 style="font-size: 5rem;">QUANTITÉ VS EFFICACITÉ</h1>
+            <p>
+                Le défi n'est pas juste de détecter du calcaire, mais de définir sa <strong>partie utile</strong>.
+            </p>
+
+            <div
+                style="margin-top: 40px; background: rgba(244, 63, 94, 0.05); border-left: 4px solid #f43f5e; padding: 30px; border-radius: 0 16px 16px 0;">
+                <strong style="display: block; font-size: 1.8rem; color: #f43f5e; margin-bottom: 10px;">Le "Verrou
+                    Technologique"</strong>
+                <p style="font-size: 1.4rem; margin: 0; color: var(--text-muted);">
+                    L'analyse manuelle est subjective. Impossible de distinguer un cristal "actif" d'un cristal "passif"
+                    sur 1000 images.
+                </p>
+            </div>
+        </div>
+
+        <div class="visual-container"
+            style="flex-direction: column; gap: 40px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.1);">
+            <div style="display: flex; align-items: center; gap: 30px; opacity: 0.5;">
+                <div style="position: relative; width: 100px; height: 100px;">
+                    <div style="width: 80px; height: 80px; background: #475569; border-radius: 50%;"></div>
+                    <div
+                        style="position: absolute; top: -10px; right: -10px; width: 40px; height: 40px; background: #fff; transform: rotate(45deg);">
+                    </div>
+                </div>
+                <div>
+                    <strong style="font-size: 1.5rem; color: #cbd5e1; text-decoration: line-through;">Cristal
+                        Isolé</strong>
+                    <div style="color: #64748b; font-size: 1.2rem;">Ne renforce pas la structure.</div>
+                </div>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 30px;">
+                <div style="position: relative; width: 150px; height: 100px; display: flex; align-items: center;">
+                    <div style="width: 80px; height: 80px; background: #475569; border-radius: 50%;"></div>
+                    <div
+                        style="width: 40px; height: 40px; background: var(--accent-bio); transform: rotate(45deg); z-index: 2; box-shadow: 0 0 20px var(--accent-bio);">
+                    </div>
+                    <div style="width: 80px; height: 80px; background: #475569; border-radius: 50%;"></div>
+                </div>
+                <div>
+                    <strong style="font-size: 1.8rem; color: var(--accent-bio);">Le Pontage (Bridging)</strong>
+                    <div style="color: #fff; font-size: 1.2rem;">Relie deux grains = Solidification réelle.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div style="grid-column: span 2; text-align: center;">
+            <h2 style="color: var(--accent-tech); border-color: var(--accent-tech);">
+                <i class="ph ph-target"></i> 03. OBJECTIFS
+            </h2>
+            <h1 style="font-size: 5rem; margin-bottom: 60px;">UNE SOLUTION "END-TO-END"</h1>
+
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px;">
+                <div
+                    style="background: var(--glass-bg); padding: 40px 30px; border-radius: 24px; border: var(--glass-border); text-align: left;">
+                    <div
+                        style="width: 70px; height: 70px; background: rgba(56, 189, 248, 0.2); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 25px; color: var(--accent-tech);">
+                        <i class="ph ph-robot" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h3 style="font-size: 2rem; margin-bottom: 15px;">Automatiser</h3>
+                    <p style="font-size: 1.3rem;">Remplacer l'œil humain par la Vision par Ordinateur (IA) pour traiter
+                        des milliers d'images.</p>
+                </div>
+
+                <div
+                    style="background: var(--glass-bg); padding: 40px 30px; border-radius: 24px; border: var(--glass-border); text-align: left;">
+                    <div
+                        style="width: 70px; height: 70px; background: rgba(52, 211, 153, 0.2); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 25px; color: var(--accent-bio);">
+                        <i class="ph ph-chart-bar" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h3 style="font-size: 2rem; margin-bottom: 15px;">Quantifier</h3>
+                    <p style="font-size: 1.3rem;">Passer d'une observation visuelle à des métriques physiques précises
+                        (Masse & Volume).</p>
+                </div>
+
+                <div
+                    style="background: var(--glass-bg); padding: 40px 30px; border-radius: 24px; border: var(--glass-border); text-align: left;">
+                    <div
+                        style="width: 70px; height: 70px; background: rgba(255, 255, 255, 0.1); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 25px; color: #fff;">
+                        <i class="ph ph-globe" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h3 style="font-size: 2rem; margin-bottom: 15px;">Démocratiser</h3>
+                    <p style="font-size: 1.3rem;">Rendre l'outil accessible aux laboratoires via une plateforme Web
+                        intuitive.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div style="display: flex; flex-direction: column; justify-content: center;">
+            <h2 style="color: var(--accent-tech); border-color: var(--accent-tech);">
+                <i class="ph ph-git-merge"></i> 04. PIPELINE MÉTHODOLOGIQUE
+            </h2>
+            <h1 style="font-size: 5rem;">DE L'IMAGE À LA DONNÉE</h1>
+            <p>Notre approche combine l'intelligence artificielle générative et la physique des matériaux.</p>
+
+            <ul style="margin-top: 40px; display: flex; flex-direction: column; gap: 25px;">
+                <li style="display: flex; gap: 20px; align-items: center; font-size: 1.4rem; color: #fff;">
+                    <div
+                        style="width: 40px; height: 40px; background: var(--accent-tech); color: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+                        1</div>
+                    Acquisition d'images MEB brutes.
+                </li>
+                <li style="display: flex; gap: 20px; align-items: center; font-size: 1.4rem; color: #fff;">
+                    <div
+                        style="width: 40px; height: 40px; background: var(--accent-tech); color: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+                        2</div>
+                    Segmentation IA (Détection des contours).
+                </li>
+                <li style="display: flex; gap: 20px; align-items: center; font-size: 1.4rem; color: #fff;">
+                    <div
+                        style="width: 40px; height: 40px; background: var(--accent-tech); color: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+                        3</div>
+                    Physique : Conversion Pixels &rarr; µm &rarr; Grammes.
+                </li>
+            </ul>
+        </div>
+
+        <div class="visual-container" style="background: white; border: none;">
+            <img src="image_c6dbc2.jpg" alt="Pipeline Schema" style="padding: 30px;">
+        </div>
+    </div>
+    <div class="slide">
+        <div style="display: flex; flex-direction: column; justify-content: center;">
+            <h2 style="color: var(--accent-tech); border-color: var(--accent-tech);">
+                <i class="ph ph-code"></i> 05. APPROCHE TECHNIQUE
+            </h2>
+            <h1 style="font-size: 5rem;">LA STACK</h1>
+            <p>L'alliance de modèles de fondation et d'algorithmes classiques.</p>
+
+            <div style="display: flex; flex-direction: column; gap: 20px; margin-top: 30px;">
+                <div
+                    style="background: rgba(56, 189, 248, 0.1); padding: 20px; border-radius: 16px; border: 1px solid rgba(56, 189, 248, 0.2);">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 5px;">
+                        <i class="ph ph-brain" style="font-size: 2rem; color: var(--accent-tech);"></i>
+                        <strong style="font-size: 1.6rem; color: #fff;">Segment Anything (SAM)</strong>
+                    </div>
+                    <p style="font-size: 1.2rem; margin: 0; color: var(--text-muted);">Le modèle de Meta pour la
+                        segmentation "Zero-Shot".</p>
+                </div>
+                <div
+                    style="background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 5px;">
+                        <i class="ph ph-brackets-curly" style="font-size: 2rem; color: #fff;"></i>
+                        <strong style="font-size: 1.6rem; color: #fff;">OpenCV</strong>
+                    </div>
+                    <p style="font-size: 1.2rem; margin: 0; color: var(--text-muted);">Traitement d'image géométrique
+                        (Calcul du Pontage).</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="visual-container"
+            style="flex-direction: column; background: #0f172a; border: 1px solid rgba(255,255,255,0.1);">
+            <div style="text-align: center;">
+                <h3
+                    style="color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 30px;">
+                    La Formule Physique</h3>
+                <div
+                    style="font-family: 'Courier New', monospace; font-size: 2rem; color: var(--accent-bio); background: rgba(0,0,0,0.3); padding: 40px; border-radius: 16px; border: 1px dashed var(--accent-bio);">
+                    Masse = Vol_IA × ρ_calcite
+                </div>
+                <div style="margin-top: 20px; color: #fff; font-size: 1.4rem;">
+                    ρ (Densité) = <strong>2.71 g/cm³</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="visual-container" style="position: relative; overflow: hidden; background: black;">
+            <img src="image_c6d7df.jpg" alt="Resultats Segmentation" style="opacity: 0.8;">
+
+            <div
+                style="position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: var(--accent-bio); box-shadow: 0 0 30px 5px var(--accent-bio); animation: scanLoop 3s infinite linear; z-index: 5;">
+            </div>
+            <style>
+                @keyframes scanLoop {
+                    0% {
+                        top: -10%;
+                        opacity: 0;
+                    }
+
+                    10% {
+                        opacity: 1;
+                    }
+
+                    90% {
+                        opacity: 1;
+                    }
+
+                    100% {
+                        top: 110%;
+                        opacity: 0;
+                    }
+                }
+            </style>
+        </div>
+
+        <div style="display: flex; flex-direction: column; justify-content: center;">
+            <h2 style="color: var(--accent-bio); border-color: var(--accent-bio);">
+                <i class="ph ph-check-circle"></i> 06. RÉSULTATS
+            </h2>
+            <h1 style="font-size: 5rem;">ÇA FONCTIONNE</h1>
+            <p>L'IA parvient à isoler les cristaux même dans des environnements complexes.</p>
+
+            <ul style="margin-top: 30px; display: flex; flex-direction: column; gap: 20px;">
+                <li
+                    style="display: flex; gap: 20px; align-items: start; background: rgba(52, 211, 153, 0.1); padding: 20px; border-radius: 12px; border: 1px solid rgba(52, 211, 153, 0.2);">
+                    <i class="ph ph-target" style="font-size: 2rem; color: var(--accent-bio);"></i>
+                    <div>
+                        <strong style="display: block; font-size: 1.4rem; color: #fff;">Segmentation Robuste</strong>
+                        <span style="font-size: 1.2rem; color: var(--text-muted);">Détourage précis sur sable
+                            irrégulier.</span>
+                    </div>
+                </li>
+                <li
+                    style="display: flex; gap: 20px; align-items: start; background: rgba(52, 211, 153, 0.1); padding: 20px; border-radius: 12px; border: 1px solid rgba(52, 211, 153, 0.2);">
+                    <i class="ph ph-ruler" style="font-size: 2rem; color: var(--accent-bio);"></i>
+                    <div>
+                        <strong style="display: block; font-size: 1.4rem; color: #fff;">Calibration Précise</strong>
+                        <span style="font-size: 1.2rem; color: var(--text-muted);">Conversion exacte via la barre
+                            d'échelle MEB.</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div style="display: flex; flex-direction: column; justify-content: center;">
+            <h2 style="color: #f43f5e; border-color: #f43f5e; background: rgba(244, 63, 94, 0.1);">
+                <i class="ph ph-warning"></i> 07. DIFFICULTÉS
+            </h2>
+            <h1 style="font-size: 5rem;">OBSTACLES</h1>
+            <p>Tout n'est pas parfait. Le système a ses limites face à la complexité du réel.</p>
+        </div>
+
+        <div class="visual-container" style="background: transparent; border: none; flex-direction: column; gap: 20px;">
+            <div
+                style="background: rgba(244, 63, 94, 0.05); padding: 30px; border-radius: 16px; border-left: 5px solid #f43f5e; width: 100%;">
+                <strong style="font-size: 1.6rem; color: #f43f5e; display: block; margin-bottom: 10px;">Substrats
+                    Lisses</strong>
+                <p style="font-size: 1.3rem; margin: 0; color: #cbd5e1;">Sur des billes de verre parfaites, l'IA manque
+                    parfois de texture pour "accrocher".</p>
+            </div>
+            <div
+                style="background: rgba(244, 63, 94, 0.05); padding: 30px; border-radius: 16px; border-left: 5px solid #f43f5e; width: 100%;">
+                <strong
+                    style="font-size: 1.6rem; color: #f43f5e; display: block; margin-bottom: 10px;">Saturation</strong>
+                <p style="font-size: 1.3rem; margin: 0; color: #cbd5e1;">Quand l'image est trop dense en cristaux, le
+                    bruit de détection augmente.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="visual-container" style="background: transparent; border: none;">
+            <div style="text-align: center; opacity: 0.8;">
+                <i class="ph ph-cube-transparent"
+                    style="font-size: 15rem; color: #334155; text-decoration: line-through;"></i>
+                <div style="font-size: 2rem; color: #f43f5e; font-weight: bold; margin-top: 20px;">PISTE ABANDONNÉE
+                </div>
+            </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; justify-content: center;">
+            <h2 style="color: #f43f5e; border-color: #f43f5e; background: rgba(244, 63, 94, 0.1);">
+                <i class="ph ph-x-circle"></i> 08. TENTATIVES EXPLORÉES
+            </h2>
+            <h1 style="font-size: 5rem;">L'IMPASSE 3D</h1>
+            <p>Nous avons tenté la <strong>Photogrammétrie</strong> via smartphone pour obtenir le volume réel.</p>
+
+            <div
+                style="background: rgba(15, 23, 42, 0.6); padding: 30px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); margin-top: 30px;">
+                <strong style="color: #fff; font-size: 1.4rem;">Pourquoi ça n'a pas marché ?</strong>
+                <p style="font-size: 1.2rem; margin-top: 10px; color: var(--text-muted);">
+                    Les images MEB sont des projections orthographiques (sans perspective). Les logiciels de
+                    reconstruction 3D (Meshroom) ne trouvent pas de point de fuite. Résultat : Des formes aberrantes.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div style="display: flex; flex-direction: column; justify-content: center;">
+            <h2 style="color: var(--accent-tech); border-color: var(--accent-tech);">
+                <i class="ph ph-arrows-out-line-horizontal"></i> 09. LIMITES ACTUELLES
+            </h2>
+            <h1 style="font-size: 5rem;">L'HYPOTHÈSE SPHÉRIQUE</h1>
+            <p>Nous convertissons une surface (2D) en volume (3D).</p>
+
+            <ul style="margin-top: 30px;">
+                <li style="font-size: 1.4rem; color: var(--text-muted);">• C'est une <strong>estimation</strong>, pas
+                    une mesure absolue.</li>
+                <li style="font-size: 1.4rem; color: var(--text-muted);">• Suffisant pour de la comparaison statistique
+                    (A vs B).</li>
+                <li style="font-size: 1.4rem; color: var(--text-muted);">• Pour l'absolu : Il faudrait de la Tomographie
+                    (coût > 100k€).</li>
+            </ul>
+        </div>
+
+        <div class="visual-container" style="background: transparent; border: none;">
+            <div style="display: flex; align-items: center; gap: 40px;">
+                <div style="text-align: center;">
+                    <div style="width: 150px; height: 150px; border: 4px solid var(--accent-tech); border-radius: 50%;">
+                    </div>
+                    <div style="margin-top: 20px; font-size: 1.5rem; color: var(--accent-tech);">Surface 2D</div>
+                </div>
+                <i class="ph ph-arrow-right" style="font-size: 4rem; color: #fff;"></i>
+                <div style="text-align: center;">
+                    <div
+                        style="width: 150px; height: 150px; background: radial-gradient(circle at 30% 30%, var(--accent-bio), #064e3b); border-radius: 50%;">
+                    </div>
+                    <div style="margin-top: 20px; font-size: 1.5rem; color: var(--accent-bio);">Volume 3D</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide" style="grid-template-columns: 1fr; align-content: center; text-align: center;">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <h2 style="color: var(--accent-bio); border-color: var(--accent-bio); justify-content: center;">
+                <i class="ph ph-flag"></i> CONCLUSION
+            </h2>
+            <h1 style="font-size: 6rem; margin-bottom: 20px;">IMPACT DU PROJET</h1>
+            <p style="font-size: 2.2rem; margin-bottom: 80px;">NAAI V2 transforme une recherche artisanale en processus
+                industriel standardisé.</p>
+
+            <div style="display: flex; gap: 60px; justify-content: center;">
+                <div
+                    style="background: rgba(52, 211, 153, 0.1); padding: 40px 60px; border-radius: 24px; border: 1px solid rgba(52, 211, 153, 0.2);">
+                    <div style="font-size: 6rem; font-weight: 800; color: var(--accent-bio); line-height: 1;">x100</div>
+                    <div style="font-size: 1.5rem; color: var(--text-muted); margin-top: 10px;">Vitesse d'Analyse</div>
+                </div>
+                <div
+                    style="background: rgba(56, 189, 248, 0.1); padding: 40px 60px; border-radius: 24px; border: 1px solid rgba(56, 189, 248, 0.2);">
+                    <div style="font-size: 6rem; font-weight: 800; color: var(--accent-tech); line-height: 1;">WEB</div>
+                    <div style="font-size: 1.5rem; color: var(--text-muted); margin-top: 10px;">Accessibilité Totale
+                    </div>
+                </div>
+            </div>
+
+            <div
+                style="margin-top: 100px; font-size: 1.4rem; color: #64748b; letter-spacing: 2px; text-transform: uppercase;">
+                Merci de votre attention
+            </div>
+        </div>
+    </div>
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+
+        function changeSlide(dir) {
+            const next = currentSlide + dir;
+            if (next >= 0 && next < slides.length) {
+                gsap.to(slides[currentSlide], { opacity: 0, scale: 0.95, duration: 0.5 });
+
+                currentSlide = next;
+
+                const slide = slides[currentSlide];
+                slide.classList.add('active');
+                gsap.fromTo(slide,
+                    { opacity: 0, scale: 1.05, visibility: 'visible' },
+                    { opacity: 1, scale: 1, duration: 0.6, ease: "power2.out" }
+                );
+
+                const elements = slide.querySelectorAll('h1, h2, p, .visual-container, .team-member, .academic-info, .partners');
+                gsap.fromTo(elements,
+                    { y: 40, opacity: 0 },
+                    { y: 0, opacity: 1, duration: 0.5, stagger: 0.08, delay: 0.1 }
+                );
+            }
+        }
+
+        // Init
+        gsap.fromTo(slides[0].querySelectorAll('*'), { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, stagger: 0.1 });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') changeSlide(1);
+            if (e.key === 'ArrowLeft') changeSlide(-1);
+        });
+    </script>
+</body>
+
+</html>
